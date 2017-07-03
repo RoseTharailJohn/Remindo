@@ -1,0 +1,26 @@
+{
+  "manifest_version": 2,
+  "name": "Remindo",
+  "description": "An extension that reminds you of a bookmarked page",
+  "permissions": [
+    "bookmarks", "tabs", "alarms", "notifications", "storage", "system.storage", "unlimitedStorage"
+  ],
+  "version": "1.0.1",
+  "background": {
+    "scripts": ["background.js"],
+    "persistent": false
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "<all_urls>"
+      ],
+      "js": ["jquery.js", "content.js"]
+    }
+  ],
+  "browser_action": {
+    "default_icon": "alarm.png",
+    "default_popup": "popup.html",
+    "default_title": "Hi! I am Remindo.\nClick me to remind you about a bookmark"
+  }
+}

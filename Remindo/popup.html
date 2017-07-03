@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<script src="jquery.js"></script>
+		<script src="popup.js"></script>
+		<style>
+		p.outer {
+		    width: 300px;
+		}
+		.btn img {  
+		    display: inline-block;
+		    vertical-align: middle;
+		    background: #00fb00;
+		    padding: 5px;
+		    border-radius: 5px;
+		    cursor: pointer;
+		} 
+		</style>
+	</head>
+	<body>
+		<p class="outer">
+			<p>Bookmark and Remind me after:</p>
+			<input type="radio" name="remindAfter" value="15">15 mins</input><br>
+			<input type="radio" name="remindAfter" value="30">Half hour</input><br>
+			<input type="radio" name="remindAfter" value="60">One hour</input><br>
+			<input type="radio" name="remindAfter" value="1440">Tomorrow</input><br>
+			<input type="radio" name="remindAfter" checked value="0">Chrome restart</input><br><br>
+			<button class="btn" id="alarmBtn">               
+    			<img  src="alarm.png" width="10" height="13"/>
+    			<span>Set</span>
+			</button>
+		</p>
+	</body>
+</html>
