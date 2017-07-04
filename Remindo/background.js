@@ -40,14 +40,14 @@ chrome.runtime.onStartup.addListener(function () {
     // alert("Allkeys" + allKeys);
     if(allKeys.length!=0) {
       remindoUrls = items["Remindo"];
-      alert(remindoUrls[0]);
+      // alert(remindoUrls[0]);
       if(remindoUrls && remindoUrls.length>0) {
         for(var i=0;i<remindoUrls.length;i++) {
           // open a new tab for each of these urls
           chrome.tabs.create({"url": remindoUrls[i]});          
         }
         // finally send a notification that these were opened
-        chrome.notifications.create(alarm.name, {
+        chrome.notifications.create("Remindo-OnStartup", {
           type: 'basic',
           iconUrl: 'alarm.png',
           title: 'Remindo: You asked me to remind you of something.',

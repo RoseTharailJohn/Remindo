@@ -1,9 +1,7 @@
-
-
-
 storage for chrome restart notifications
-change 0.1 default notification time  to variable
 window.close() should be put back
+change 0.1 default notification time  to variable
+remove alerts and console.logs
 
 BUG
 bookmarks getting bookmarked twice STILL
@@ -13,7 +11,8 @@ C:\Users\tharair\AppData\Local\Google\Chrome\User Data\Default
 
 
 future 
-chrome.storage.sync
+chrome.storage.sync -- for syncing stuff across computers
+when chrome opens, how to handle multiple urls being open in notifications/ deleting the bookmarks
 
 ====================================================================
 old stuff
