@@ -1,0 +1,66 @@
+
+
+
+storage for chrome restart notifications
+change 0.1 default notification time  to variable
+window.close() should be put back
+
+BUG
+bookmarks getting bookmarked twice STILL
+
+???? opening of window when multiple chrome windows are open errors out with - (BLESSED_EXTENSION context for panhlpepnnoinfdhmoegahijamdmbfep) Lazy require of tabs.binding did not set the binding field
+C:\Users\tharair\AppData\Local\Google\Chrome\User Data\Default
+
+
+future 
+chrome.storage.sync
+
+====================================================================
+old stuff
+// content.js
+/*chrome.runtime.onMessage.addListener(
+  function(request, sender, sendResponse) {
+    if( request.message === "clicked_browser_action" ) {
+      var firstHref = $("a[href^='http']").eq(0).attr("href");
+
+      console.log(firstHref);
+
+      // This line is new!
+      chrome.runtime.sendMessage({"message": "open_new_tab", "url": firstHref});
+    }
+  }
+);*/
+
+/*// Register a message listener from the alarm setter button
+  chrome.runtime.onMessage.addListener(
+    function(request, sender, sendResponse) {
+      if( request.message === "RemindoBookmarkMe" ) {
+     	var url = request.url;
+    	var alarmTime = request.alarmTime;
+    	chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+    		var activeTab = tabs[0];
+    		chrome.tabs.sendMessage(activeTab.id, {"message": "testAlert", "url":url, "alarmTime":alarmTime});
+  		});
+      }
+    }
+  );*/
+
+
+// Called when the user clicks on the browser action.
+/*chrome.browserAction.onClicked.addListener(function(tab) {
+  // Send a message to the active tab
+  chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+    var activeTab = tabs[0];
+    chrome.tabs.sendMessage(activeTab.id, {"message": "clicked_browser_action"});
+  });
+});*/
+
+/*// This block is new!
+chrome.runtime.onMessage.addListener(
+  function(request, sender, sendResponse) {
+    if( request.message === "open_new_tab" ) {
+      chrome.tabs.create({"url": request.url});
+    }
+  }
+);
+*/

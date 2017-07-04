@@ -1,30 +1,9 @@
 // background.js
-
-// Called when the user clicks on the browser action.
-/*chrome.browserAction.onClicked.addListener(function(tab) {
-  // Send a message to the active tab
-  chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-    var activeTab = tabs[0];
-    chrome.tabs.sendMessage(activeTab.id, {"message": "clicked_browser_action"});
-  });
-});*/
-
-/*// This block is new!
-chrome.runtime.onMessage.addListener(
-  function(request, sender, sendResponse) {
-    if( request.message === "open_new_tab" ) {
-      chrome.tabs.create({"url": request.url});
-    }
-  }
-);
-*/
-
 // execute this when extension is installed for the first time
 chrome.runtime.onInstalled.addListener(function (details) {
   chrome.bookmarks.getChildren('0', function(children) {
     for (var i = 0; i < children.length; i++) {
       var bookmark = children[i];
-      // console.log(bookmark.title);
       if (bookmark.title == 'Bookmarks bar') {
         var bookmarksBar = bookmark;
         chrome.bookmarks.getChildren(bookmarksBar.id, function(children) {
@@ -32,13 +11,11 @@ chrome.runtime.onInstalled.addListener(function (details) {
           for (var j = 0; j < children.length; j++) {
             var bookmarksBarChild = children[j];
             if(bookmarksBarChild.title == 'Remindo bookmarks') {
-              // console.log("Found remindo bookmarks!")
               foundRemindoBookmarksFolder = true;
               break;
             }
           }
           if(foundRemindoBookmarksFolder!=true) {
-            console.log("Did not find remindo bookmarks! So, will add Remindo bokmarks folder")
             // create a Remindo specific bookmarks folder, if it does not exist already
             chrome.bookmarks.create({'parentId': bookmarksBar.id/*bookmarkBar.id*/,
               'title': 'Remindo bookmarks'},
@@ -57,8 +34,33 @@ chrome.runtime.onInstalled.addListener(function (details) {
 // on chrome start up fire notifications for pages that have to be reminded on start up
 chrome.runtime.onStartup.addListener(function () {
   // this is used to check for bookmarks with on start up alarm times and open those urls
-
-  // clear the notification from storage
+  chrome.storage.local.get(null, function(items) {
+    var allKeys = Object.keys(items);
+    var remindoUrls;
+    // alert("Allkeys" + allKeys);
+    if(allKeys.length!=0) {
+      remindoUrls = items["Remindo"];
+      alert(remindoUrls[0]);
+      if(remindoUrls && remindoUrls.length>0) {
+        for(var i=0;i<remindoUrls.length;i++) {
+          // open a new tab for each of these urls
+          chrome.tabs.create({"url": remindoUrls[i]});          
+        }
+        // finally send a notification that these were opened
+        chrome.notifications.create(alarm.name, {
+          type: 'basic',
+          iconUrl: 'alarm.png',
+          title: 'Remindo: You asked me to remind you of something.',
+          priority: 1,
+          requireInteraction: false,
+          message: 'I have opened them for you in your current Google Chrome window!'
+        }, function(notificationId) {});
+        items["Remindo"] = [];
+        // clear the urls from storage after their tabs have been open
+        chrome.storage.local.set(items);
+      }
+    }
+  });
 });
 
 // catch an alarm from the Remindo and send a notification when it is time
@@ -82,10 +84,7 @@ chrome.alarms.onAlarm.addListener(function(alarm) {
             title: "Delete bookmark",
             iconUrl: "delete.png"
           }]
-       }, function(notificationId) {
-          // clear the notification from storage
-
-       });
+       }, function(notificationId) {});
   }
 });
 
@@ -98,7 +97,7 @@ chrome.notifications.onButtonClicked.addListener(function(notificationId, button
       if (notificationId.startsWith("Remindo: ")) {
         chrome.windows.getCurrent(function(currentWindow) {
           if (currentWindow != null) {
-            chrome.tabs.query({}, function(tabs) {
+            chrome.tabs.query({'url':url, currentWindow: true}, function(tabs) {
               var isOpenFlag = false;
               for (var i=tabs.length-1; i>=0; i--) {
                 if (tabs[i].url === urlToOpen) {
